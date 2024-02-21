@@ -6,6 +6,11 @@
     pkgs.tealdeer
     pkgs.python311Packages.supervisor
     pkgs.bottom
+    pkgs.procs
+    pkgs.curl
+    pkgs.xh
+    pkgs.traceroute
+    pkgs.iproute2
     # Base-devel? https://archlinux.org/packages/core/any/base-devel/
     pkgs.gzip
     pkgs.gcc

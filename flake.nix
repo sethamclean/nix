@@ -16,6 +16,11 @@
              name = "image-root";
              paths = [
               pkgs.coreutils-full
+              pkgs.find
+              pkgs.awk
+              pkgs.sed
+              pkgs.grep
+              pkgs.ncurses
               pkgs.dockerTools.fakeNss
               pkgs.dockerTools.caCertificates
               pkgs.dockerTools.usrBinEnv
