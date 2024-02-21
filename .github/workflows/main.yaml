@@ -12,10 +12,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up Nix
-        uses: cachix/install-nix-action@v13
-
+      - uses: DeterminateSystems/nix-installer-action@v3
+      - uses: DeterminateSystems/magic-nix-cache-action@v3
+      - uses: DeterminateSystems/flake-checker-action@v3
       - name: Build Docker image
         run: |
           nix \
