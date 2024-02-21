@@ -8,6 +8,10 @@
     pkgs.bottom
     # Base-devel? https://archlinux.org/packages/core/any/base-devel/
     pkgs.gzip
+    pkgs.gcc
+    pkgs.clang-tools
+    pkgs.cmake
+    pkgs.gnumake
     # end base-deel
     pkgs.zsh
     pkgs.git
@@ -19,11 +23,14 @@
     pkgs.rustup
     pkgs.ripgrep
     pkgs.fzf
+    pkgs.bat
+    pkgs.fd
     pkgs.eza
     pkgs.zoxide
     pkgs.stow
     pkgs.parallel
-    pkgs.docker
+    pkgs.podman
+    pkgs.buildkit
     pkgs.neovim
     pkgs.stylua
     pkgs.nodePackages.prettier
