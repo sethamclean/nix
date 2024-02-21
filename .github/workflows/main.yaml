@@ -18,7 +18,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          nix --extra-experimental-features nix-command flakes build .#docker
+          nix \
+          --extra-experimental-features nix-command \
+          --extra-experimental-features nix-command flakes \
+          build .#docker
           docker load < ./result
 
       - name: Log in to GitHub Container Registry
