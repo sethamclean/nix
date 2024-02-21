@@ -11,14 +11,15 @@
         dev = import ./packages.nix { pkgs=pkgs; };
         dockerImage = pkgs.dockerTools.buildImage {
           name = "seth-docker";
-           copyToRoot = pkgs.buildEnv {
-              name = "image-root";
-              paths = dev.Pkgs;
-           };
-           config = {
-             Entrypoint = [ "/usr/bin/supervisord" ];  # Set Supervisor as the entry point
-             Cmd = [ "-c" "/etc/supervisord.conf" ];   # Specify Supervisor config file
-           };
+          tag = "latest";
+          copyToRoot = pkgs.buildEnv {
+             name = "image-root";
+             paths = dev.Pkgs;
+          };
+          config = {
+            Entrypoint = [ "/usr/bin/supervisord" ];  # Set Supervisor as the entry point
+            Cmd = [ "-c" "/etc/supervisord.conf" ];   # Specify Supervisor config file
+          };
         };
       in {
         packages = { 
