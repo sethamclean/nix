@@ -14,11 +14,16 @@
           tag = "latest";
           copyToRoot = pkgs.buildEnv {
              name = "image-root";
-             paths = dev.Pkgs;
+             paths = [
+              pkgs.dockerTools.fakeNss
+              pkgs.dockerTools.caCertificates
+              pkgs.dockerTools.usrBinEnv
+              pkgs.dockerTools.binSh
+              ] ++ dev.Pkgs;
+             pathsToLink = [ "/bin" "/etc" "/var" ];
           };
           config = {
-            Entrypoint = [ "/usr/bin/supervisord" ];  # Set Supervisor as the entry point
-            Cmd = [ "-c" "/etc/supervisord.conf" ];   # Specify Supervisor config file
+            Cmd = [ "zsh" ];   # Specify Supervisor config file
           };
         };
       in {
