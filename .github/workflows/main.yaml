@@ -28,5 +28,5 @@ jobs:
 
       - name: Tag and push Docker image
         run: |
-          docker tag seth-docker:latest ghcr.io/${{ github.repository_owner }}/seth-docker:latest
+          docker tag seth-docker ghcr.io/${{ github.repository_owner }}/seth-docker:latest
           docker push ghcr.io/${{ github.repository_owner }}/seth-docker:latest
