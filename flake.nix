@@ -21,6 +21,7 @@
               pkgs.gnused
               pkgs.gnugrep
               pkgs.ncurses
+              pkgs.su
               pkgs.dockerTools.fakeNss
               pkgs.dockerTools.caCertificates
               pkgs.dockerTools.usrBinEnv
@@ -28,8 +29,12 @@
               ] ++ dev.Pkgs;
              pathsToLink = [ "/bin" "/etc" "/var" ];
           };
+          runAsRoot = ''
+            mkdir -p /root/ 
+            usermod -d /root/ root
+          '';
           config = {
-            Cmd = [ "zsh" ];   # Specify Supervisor config file
+            Cmd = [ "/bin/zsh" ];
           };
         };
       in {
