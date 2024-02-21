@@ -15,6 +15,7 @@
           copyToRoot = pkgs.buildEnv {
              name = "image-root";
              paths = [
+              pkgs.coreutils-full
               pkgs.dockerTools.fakeNss
               pkgs.dockerTools.caCertificates
               pkgs.dockerTools.usrBinEnv
