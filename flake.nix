@@ -10,7 +10,7 @@
         pkgs = import nixpkgs { inherit system; };
         dev = import ./packages.nix { pkgs=pkgs; };
         dockerImage = pkgs.dockerTools.buildImage {
-          name = "my-layered-image";
+          name = "seth-docker";
            copyToRoot = pkgs.buildEnv {
               name = "image-root";
               paths = dev.Pkgs;
