@@ -7,7 +7,7 @@
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs { config = { allowUnfree = true; }; inherit system; };
         dev = import ./packages.nix { pkgs=pkgs; };
         dockerImage = pkgs.dockerTools.buildImage {
           name = "seth-docker";
