@@ -68,7 +68,6 @@
     pkgs.tflint
     pkgs.github-release
     pkgs.golangci-lint
-    pkgs.cargo
     pkgs.rustc
     # pyenv-virtualenv?
     # tfenv
