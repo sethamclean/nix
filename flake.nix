@@ -33,8 +33,11 @@
           runAsRoot = ''
             #!${pkgs.runtimeShell}
             ${pkgs.dockerTools.shadowSetup}
+            groupadd -g 22 sshd
+            groupadd -g 1000 seth
+            groupadd -g 10 wheel
             useradd -r -g sshd sshd
-            useradd -g seth 
+            useradd -u 1000 -g seth seth
             usermmod -aG wheel seth
             echo "wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers 
             mkdir -p  /home/seth && chown seth:seth /home/seth
