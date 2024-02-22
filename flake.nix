@@ -32,6 +32,7 @@
           runAsRoot = ''
             mkdir -p /root/ 
             usermod -d /root/ root
+            useradd sshd
           '';
           config = {
             Cmd = [ "/bin/zsh" ];
