@@ -33,6 +33,7 @@
           runAsRoot = ''
             #!${pkgs.runtimeShell}
             ${pkgs.dockerTools.shadowSetup}
+            touch /etc/group
             groupadd -g 22 sshd
             groupadd -g 1000 seth
             groupadd -g 10 wheel
