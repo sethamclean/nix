@@ -22,6 +22,7 @@
               pkgs.gnugrep
               pkgs.ncurses
               pkgs.shadow
+              pkgs.sudo
               pkgs.dockerTools.fakeNss
               pkgs.dockerTools.caCertificates
               pkgs.dockerTools.usrBinEnv
@@ -30,10 +31,13 @@
              pathsToLink = [ "/bin" "/etc" "/var" ];
           };
           runAsRoot = ''
-            mkdir -p /root/ 
-            # usermod -d /root/ root
-            sed -i 's/\/var\/empty/\/root/' /etc/passwd
-            useradd sshd
+            #!${pkgs.runtimeShell}
+            ${pkgs.dockerTools.shadowSetup}
+            useradd -r -g sshd sshd
+            useradd -g seth 
+            usermmod -aG wheel seth
+            echo "wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers 
+            mkdir -p  /home/seth && chown seth:seth /home/seth
           '';
           config = {
             Cmd = [ "/bin/zsh" ];
