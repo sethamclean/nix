@@ -11,10 +11,20 @@
         dev = import ./packages.nix { pkgs=pkgs; };
       in {
         devShell = pkgs.mkShell {
-          buildInputs = dev.Pkgs;
+          buildInputs = [
+            pkgs.python311Packages.supervisor
+            pkgs.openssh
+            pkgs.docker
+            pkgs.which
+          ];
         };
         defaultPackage = pkgs.mkShell{
-          buildInputs = dev.Pkgs ;
+          buildInputs = [
+            pkgs.python311Packages.supervisor
+            pkgs.openssh
+            pkgs.docker
+            pkgs.which
+          ];
         };
       }
     );

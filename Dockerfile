@@ -6,4 +6,5 @@ RUN echo "auto-optimise-store = true" >> /etc/nix/nix.conf
 ADD *.nix /root/nix/
 ADD flake.lock /root/nix/
 RUN cd /root/nix && nix build
-CMD ["sh", "-c", "cd /root/nix && nix develop --command zsh"]
+ADD supervisord.conf /etc/supervisord.conf
+CMD ["sh", "-c", "cd /root/nix && nix develop --command supervisord -c /etc/supervisord.conf"]
