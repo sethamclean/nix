@@ -21,6 +21,7 @@
     pkgs.zsh
     pkgs.git
     pkgs.less
+    pkgs.openssh
     pkgs.bind
     pkgs.zip
     pkgs.unzip
