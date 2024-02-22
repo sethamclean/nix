@@ -31,7 +31,8 @@
           };
           runAsRoot = ''
             mkdir -p /root/ 
-            usermod -d /root/ root
+            # usermod -d /root/ root
+            sed -i 's/\/var\/empty/\/root/' /etc/passwd
             useradd sshd
           '';
           config = {
