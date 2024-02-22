@@ -1,6 +1,5 @@
-FROM alpine:latest
+FROM nixos/nix:latest
 
-RUN apk update && apk add --no-cache openssh nix --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 RUN echo "experimental-features = nix-command flakes" > /etc/nix/nix.conf
 RUN echo "auto-optimise-store = true" >> /etc/nix/nix.conf
 ADD *.nix /root/nix/
