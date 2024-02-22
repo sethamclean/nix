@@ -33,15 +33,14 @@
           runAsRoot = ''
             #!${pkgs.runtimeShell}
             ${pkgs.dockerTools.shadowSetup}
-            touch /etc/group
-            groupadd -g 22 sshd
-            groupadd -g 1000 seth
-            groupadd -g 10 wheel
-            useradd -r -g sshd sshd
-            useradd -u 1000 -g seth seth
-            usermmod -aG wheel seth
-            echo "wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers 
-            mkdir -p  /home/seth && chown seth:seth /home/seth
+            sudo groupadd -g 22 sshd
+            sudo groupadd -g 1000 seth
+            sudo groupadd -g 10 wheel
+            sudo useradd -r -g sshd sshd
+            sudo useradd -u 1000 -g seth seth
+            sudo usermmod -aG wheel seth
+            sudo echo "wheel ALL=(ALL) NOPASSWD: ALL\n" >> /etc/sudoers 
+            sudo mkdir -p  /home/seth && chown seth:seth /home/seth
           '';
           config = {
             Cmd = [ "/bin/zsh" ];
