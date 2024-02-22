@@ -6,4 +6,4 @@ RUN echo "auto-optimise-store = true" >> /etc/nix/nix.conf
 ADD *.nix /root/nix/
 ADD flake.lock /root/nix/
 RUN cd /root/nix && nix build
-CMD ["sh", "-c", "cd /root/nix && nix develop --command=zsh"]
+CMD ["sh", "-c", "cd /root/nix && nix develop --command zsh"]
