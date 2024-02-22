@@ -21,7 +21,7 @@
               pkgs.gnused
               pkgs.gnugrep
               pkgs.ncurses
-              pkgs.su
+              pkgs.shadow
               pkgs.dockerTools.fakeNss
               pkgs.dockerTools.caCertificates
               pkgs.dockerTools.usrBinEnv
@@ -31,7 +31,7 @@
           };
           runAsRoot = ''
             mkdir -p /root/ 
-            # /bin/usermod -d /root/ root
+            usermod -d /root/ root
           '';
           config = {
             Cmd = [ "/bin/zsh" ];
