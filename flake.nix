@@ -12,35 +12,16 @@
         dockerImage = pkgs.dockerTools.buildImage {
           name = "seth-docker";
           tag = "latest";
+          fromImage = "apline";
           copyToRoot = pkgs.buildEnv {
              name = "image-root";
-             paths = [
-              pkgs.coreutils-full
-              pkgs.findutils
-              pkgs.gawk
-              pkgs.gnused
-              pkgs.gnugrep
-              pkgs.ncurses
-              pkgs.shadow
-              pkgs.sudo
-              pkgs.dockerTools.fakeNss
-              pkgs.dockerTools.caCertificates
-              pkgs.dockerTools.usrBinEnv
-              pkgs.dockerTools.binSh
-              ] ++ dev.Pkgs;
+             paths = dev.Pkgs;
              pathsToLink = [ "/bin" "/etc" "/var" ];
           };
           runAsRoot = ''
             #!${pkgs.runtimeShell}
             ${pkgs.dockerTools.shadowSetup}
-            sudo groupadd -g 22 sshd
-            sudo groupadd -g 1000 seth
-            sudo groupadd -g 10 wheel
-            sudo useradd -r -g sshd sshd
-            sudo useradd -u 1000 -g seth seth
-            sudo usermmod -aG wheel seth
-            sudo echo "wheel ALL=(ALL) NOPASSWD: ALL\n" >> /etc/sudoers 
-            sudo mkdir -p  /home/seth && chown seth:seth /home/seth
+            apk add --no-cache openssh
           '';
           config = {
             Cmd = [ "/bin/zsh" ];
@@ -48,7 +29,7 @@
         };
       in {
         packages = { 
-          docker = dockerImage;
+          dockerImage = dockerImage;
         };
         defaultPackage = dockerImage;
         devShell = pkgs.mkShell {
