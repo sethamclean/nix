@@ -48,7 +48,7 @@
         };
       in {
         packages = { 
-          docker = dockerImage;
+          dockerImage = dockerImage;
         };
         defaultPackage = dockerImage;
         devShell = pkgs.mkShell {
