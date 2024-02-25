@@ -1,20 +1,21 @@
-FROM alpine:latest
+FROM ubuntu:latest
 
-# use the apline openssh package so that groups and default configs are created
-# code spaces also has an easier time finding sshd then trying to point it to
-# the nix store.
-RUN apk update && apk add --no-cache curl openssh
-# Generate SSHD host key
-RUN ssh-keygen -A
-RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
-  | sh -s -- install linux --init none --no-confirm 
-# We just needed curl to install nix, so we can remove it now
-RUN apk del curl
-RUN echo "experimental-features = nix-command flakes" > /etc/nix/nix.conf
-RUN echo "auto-optimise-store = true" >> /etc/nix/nix.conf
-ADD *.nix /root/nix/
-ADD flake.lock /root/nix/
+RUN \
+  apt-get update && \
+  apt-get install -y curl && \
+  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
+  | sh -s -- install linux --init none --no-confirm && \
+  apt-get remove -y curl && \
+  rm -rf /var/lib/apt/lists/*
 ENV PATH="${PATH}:/nix/var/nix/profiles/default/bin"
+RUN <<EOF
+mkdir -p /etc/nix
+cat <<EOI > /etc/nix/nix.conf
+experimental-features = nix-command flakes 
+auto-optimise-store = true
+EOI
+EOF
+COPY flake.nix packages.nix flake.lock /root/nix/
 RUN cd /root/nix && nix profile install
-ADD supervisord.conf /etc/supervisord.conf
+COPY supervisord.conf /etc/supervisord.conf
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
