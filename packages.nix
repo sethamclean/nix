@@ -1,6 +1,11 @@
 { pkgs }:
 {
- Pkgs = [
+ daemons = [
+    pkgs.python311Packages.supervisor
+    pkgs.openssh
+    pkgs.docker
+ ];
+ cli = [
     pkgs.nixStatic
     pkgs.man
     pkgs.tealdeer

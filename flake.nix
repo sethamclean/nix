@@ -12,19 +12,12 @@
       in {
         devShell = pkgs.mkShell {
           buildInputs = [
-            pkgs.python311Packages.supervisor
-            pkgs.openssh
-            pkgs.docker
-            pkgs.which
+            dev.daemons
           ];
         };
-        defaultPackage = pkgs.mkShell{
-          buildInputs = [
-            pkgs.python311Packages.supervisor
-            pkgs.openssh
-            pkgs.docker
-            pkgs.which
-          ];
+        defaultPackage = pkgs.buildEnv {
+          name = "daemons";
+          paths = dev.daemons;
         };
       }
     );
