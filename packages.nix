@@ -5,30 +5,30 @@
     pkgs.docker
  ];
  cli = [
-    pkgs.nixStatic
+    pkgs.zsh
+    pkgs.neovim
+    pkgs.tmux
+    pkgs.git
+    pkgs.gh
     pkgs.man
     pkgs.tealdeer
-    pkgs.python311Packages.supervisor
     pkgs.bottom
     pkgs.procs
     pkgs.curl
     pkgs.xh
     pkgs.traceroute
     pkgs.iproute2
-    # Base-devel? https://archlinux.org/packages/core/any/base-devel/
     pkgs.gzip
+    pkgs.zip
+    pkgs.unzip
+    pkgs.less
+    # Base-devel? https://archlinux.org/packages/core/any/base-devel/
     pkgs.gcc
     pkgs.clang-tools
     pkgs.cmake
     pkgs.gnumake
     # end base-deel
-    pkgs.zsh
-    pkgs.git
-    pkgs.less
-    pkgs.openssh
     pkgs.bind
-    pkgs.zip
-    pkgs.unzip
     pkgs.rustup
     pkgs.ripgrep
     pkgs.fzf
@@ -38,9 +38,7 @@
     pkgs.zoxide
     pkgs.stow
     pkgs.parallel
-    pkgs.podman
     pkgs.buildkit
-    pkgs.neovim
     pkgs.stylua
     pkgs.nodePackages.prettier
     pkgs.shellcheck
@@ -69,10 +67,8 @@
     pkgs.helm
     pkgs.vault
     pkgs.tree
-    pkgs.tmux
     pkgs.jq
     pkgs.tailscale
-    pkgs.gh
     pkgs.awscli2
     pkgs.nodejs
     pkgs.yarn
@@ -84,7 +80,6 @@
     pkgs.tflint
     pkgs.github-release
     pkgs.golangci-lint
-    pkgs.rustc
     # pyenv-virtualenv?
     # tfenv
   ];

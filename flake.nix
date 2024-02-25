@@ -13,11 +13,12 @@
         devShell = pkgs.mkShell {
           buildInputs = [
             dev.daemons
+            dev.cli
           ];
         };
         defaultPackage = pkgs.buildEnv {
-          name = "daemons";
-          paths = dev.daemons;
+          name = "packages";
+          paths = dev.daemons ++ dev.cli;
         };
       }
     );
