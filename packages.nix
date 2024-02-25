@@ -2,7 +2,6 @@
 {
  daemons = [
     pkgs.python311Packages.supervisor
-    pkgs.openssh
     pkgs.docker
  ];
  cli = [
