@@ -81,6 +81,7 @@
     pkgs.github-release
     pkgs.golangci-lint
     pkgs.cve-bin-tool
+    pkgs.python3
     # pyenv-virtualenv?
     # tfenv
   ];
