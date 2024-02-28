@@ -50,23 +50,6 @@ jobs:
           name: sbom.spdx
           path: sbom.spdx.json
 
-      - name: Extract nix store
-        run: |
-          container_id=$(docker create "ghcr.io/${{ github.repository_owner }}/seth-docker:latest")
-          docker cp "$container_id:/nix/store/" "./store"
-
-      - name: Generate Nix store SBOM
-        uses: anchore/sbom-action@v0
-        with:
-          artifact-name: nix-sbom.spdx.json
-          path: "./store"
-
-      - name: Upload Nix SBOM as release asset
-        uses: actions/upload-artifact@v4
-        with:
-          name: nix-sbom.spdx
-          path: nix-sbom.spdx.json
-
       - name: Scan SBOMs
         uses: intel/cve-bin-tool-action@main
         with:
