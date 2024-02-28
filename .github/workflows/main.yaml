@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  security-events: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -54,3 +57,5 @@ jobs:
         uses: intel/cve-bin-tool-action@main
         with:
           scan_mode: sbom-only
+          sbom_type: spdx
+          sbom_format: json
