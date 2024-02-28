@@ -55,8 +55,12 @@ jobs:
           path: sbom.spdx.json
 
       - name: Scan SBOMs
-        uses: intel/cve-bin-tool-action@main
+        run: |
+          pip install cve-bin-tool
+          cve-bin-tool --sbom spdx --sbom-file sbom.spdx.json -f csv -o cve-report
+
+      - name: Upload CVE report
+        uses: actions/upload-artifact@v4
         with:
-          scan_mode: sbom-only
-          sbom_type: spdx
-          sbom_format: json
+          name: cve-report
+          path: cve-report.csv
