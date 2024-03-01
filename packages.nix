@@ -1,7 +1,7 @@
 { pkgs }:
 {
  daemons = [
-    pkgs.python312Packages.supervisor
+    pkgs.python311Packages.supervisor
     pkgs.docker
  ];
  cli = [
@@ -42,23 +42,23 @@
     pkgs.stylua
     pkgs.nodePackages.prettier
     pkgs.shellcheck
-    pkgs.python312Packages.pynvim
+    pkgs.python311Packages.pynvim
     pkgs.go
     pkgs.gopls
     pkgs.delve
     pkgs.parallel
     pkgs.pyenv
-    pkgs.python312Packages.pip
+    pkgs.python311Packages.pip
     pkgs.pipenv
     pkgs.poetry
-    pkgs.python312Packages.python-lsp-server
+    pkgs.python311Packages.python-lsp-server
     pkgs.pre-commit
     pkgs.ruff
-    pkgs.python312Packages.debugpy
-    pkgs.python312Packages.pytest
-    pkgs.python312Packages.pylint
+    pkgs.python311Packages.debugpy
+    pkgs.python311Packages.pytest
+    pkgs.python311Packages.pylint
     pkgs.mypy
-    pkgs.python312Packages.flake8
+    pkgs.python311Packages.flake8
     pkgs.shfmt
     pkgs.nodePackages.npm
     pkgs.ruby
