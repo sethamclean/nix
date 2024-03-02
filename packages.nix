@@ -38,23 +38,15 @@
     pkgs.stylua
     pkgs.nodePackages.prettier
     pkgs.shellcheck
-    pkgs.python311Packages.pynvim
     pkgs.go
     pkgs.gopls
     pkgs.delve
     pkgs.parallel
     pkgs.pyenv
-    pkgs.python311Packages.pip
-    pkgs.pipenv
     pkgs.poetry
-    pkgs.python311Packages.python-lsp-server
+    pkgs.pipenv
     pkgs.pre-commit
     pkgs.ruff
-    pkgs.python311Packages.debugpy
-    pkgs.python311Packages.pytest
-    pkgs.python311Packages.pylint
-    pkgs.mypy
-    pkgs.python311Packages.flake8
     pkgs.shfmt
     pkgs.nodePackages.npm
     pkgs.ruby
@@ -77,7 +69,20 @@
     pkgs.github-release
     pkgs.golangci-lint
     pkgs.cve-bin-tool
-    pkgs.python3
+    (pkgs.python3.withPackages (
+     python-pkgs: [
+       python-pkgs.python-lsp-server
+       python-pkgs.pip
+       python-pkgs.pipx
+       python-pkgs.mypy
+       python-pkgs.pynvim
+       python-pkgs.debugpy
+       python-pkgs.pytest
+       python-pkgs.pylint
+       python-pkgs.flake8
+       python-pkgs.ujson
+     ])
+    )
     pkgs.lefthook
     pkgs.nixfmt
     pkgs.ast-grep
