@@ -1,0 +1,8 @@
+pre-commit:
+  commands:
+    nix-dry-run:
+      glob: "{*.nix,flake.lock}"
+      run: nix build --dry-run
+    nix-fmt:
+      glob: "*.nix"
+      run: nixfmt *.nix

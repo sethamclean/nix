@@ -1,10 +1,6 @@
-{ pkgs }:
-{
- daemons = [
-    pkgs.python311Packages.supervisor
-    pkgs.docker
- ];
- cli = [
+{ pkgs }: {
+  daemons = [ pkgs.python311Packages.supervisor pkgs.docker ];
+  cli = [
     pkgs.zsh
     pkgs.neovim
     pkgs.tmux

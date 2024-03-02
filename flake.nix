@@ -7,19 +7,16 @@
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { config = { allowUnfree = true; }; inherit system; };
-        dev = import ./packages.nix { pkgs=pkgs; };
-      in {
-        devShell = pkgs.mkShell {
-          buildInputs = [
-            dev.daemons
-            dev.cli
-          ];
+        pkgs = import nixpkgs {
+          config = { allowUnfree = true; };
+          inherit system;
         };
+        dev = import ./packages.nix { pkgs = pkgs; };
+      in {
+        devShell = pkgs.mkShell { buildInputs = [ dev.daemons dev.cli ]; };
         defaultPackage = pkgs.buildEnv {
           name = "packages";
           paths = dev.daemons ++ dev.cli;
         };
-      }
-    );
+      });
 }
