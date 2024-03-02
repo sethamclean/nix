@@ -80,6 +80,7 @@
     pkgs.python3
     pkgs.lefthook
     pkgs.nixfmt
+    pkgs.ast-grep
     # pyenv-virtualenv?
     # tfenv
   ];
