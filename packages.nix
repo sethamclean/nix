@@ -82,6 +82,8 @@
     pkgs.golangci-lint
     pkgs.cve-bin-tool
     pkgs.python3
+    pkgs.lefthook
+    pkgs.nixfmt
     # pyenv-virtualenv?
     # tfenv
   ];
