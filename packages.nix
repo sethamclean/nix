@@ -63,26 +63,26 @@
     pkgs.google-cloud-sdk
     pkgs.jfrog-cli
     pkgs.act
+    pkgs.terraform
+    pkgs.terraform-ls
     pkgs.terraform-docs
     pkgs.tfsec
     pkgs.tflint
     pkgs.github-release
     pkgs.golangci-lint
     pkgs.cve-bin-tool
-    (pkgs.python3.withPackages (
-     python-pkgs: [
-       python-pkgs.python-lsp-server
-       python-pkgs.pip
-       python-pkgs.pipx
-       python-pkgs.mypy
-       python-pkgs.pynvim
-       python-pkgs.debugpy
-       python-pkgs.pytest
-       python-pkgs.pylint
-       python-pkgs.flake8
-       python-pkgs.ujson
-     ])
-    )
+    (pkgs.python3.withPackages (python-pkgs: [
+      python-pkgs.python-lsp-server
+      python-pkgs.pip
+      python-pkgs.pipx
+      python-pkgs.mypy
+      python-pkgs.pynvim
+      python-pkgs.debugpy
+      python-pkgs.pytest
+      python-pkgs.pylint
+      python-pkgs.flake8
+      python-pkgs.ujson
+    ]))
     pkgs.lefthook
     pkgs.nixfmt
     pkgs.ast-grep
