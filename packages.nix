@@ -86,6 +86,7 @@
     pkgs.lefthook
     pkgs.nixfmt
     pkgs.ast-grep
+    pkgs.mariadb
     # pyenv-virtualenv?
     # tfenv
   ];
