@@ -86,7 +86,8 @@
     pkgs.lefthook
     pkgs.nixfmt
     pkgs.ast-grep
-    pkgs.mariadb
+    pkgs.libmysqlclient
+    pkgs.pkg-config
     # pyenv-virtualenv?
     # tfenv
   ];
