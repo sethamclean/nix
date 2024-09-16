@@ -88,6 +88,7 @@
     pkgs.ast-grep
     pkgs.mariadb
     pkgs.pkg-config
+    pkgs.plantuml
     # pyenv-virtualenv?
     # tfenv
   ];
