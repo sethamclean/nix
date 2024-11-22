@@ -1,6 +1,7 @@
 { pkgs }: {
   daemons = [ pkgs.python311Packages.supervisor pkgs.docker ];
   cli = [
+    pkgs.azure-cli
     pkgs.zsh
     pkgs.neovim
     pkgs.tmux
