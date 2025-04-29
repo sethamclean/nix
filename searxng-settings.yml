@@ -1,0 +1,181 @@
+# SearXNG configuration optimized for local private use with JSON output only
+use_default_settings: false
+
+general:
+  debug: false
+  instance_name: "Private SearXNG"
+  privacypolicy_url: false
+  donation_url: false
+  contact_url: false
+
+server:
+  bind_address: "0.0.0.0"
+  port: 8080
+  public_instance: false
+  base_url: http://localhost:8080/
+  image_proxy: true
+  http_protocol_version: "1.1"
+  secret_key: "change_me_to_a_random_string_for_production_use"
+
+ui:
+  static_use_hash: true
+  default_theme: simple
+  query_in_title: true
+
+search:
+  safe_search: 0 # 0 = None, 1 = Moderate, 2 = Strict
+  autocomplete: "google"
+  default_lang: "en"
+  formats:
+    - json # Only JSON format enabled
+  results_on_new_tab: true
+  default_engine: "google"
+
+doi_resolvers:
+  oadoi.org: "https://oadoi.org/"
+  doi.org: "https://doi.org/"
+  doai.io: "https://dissem.in/"
+  sci-hub.se: "https://sci-hub.se/"
+  sci-hub.st: "https://sci-hub.st/"
+  sci-hub.ru: "https://sci-hub.ru/"
+
+default_doi_resolver: "oadoi.org"
+
+engines:
+  # Major search engines enabled
+  - name: google
+    engine: google
+    shortcut: g
+    disabled: false
+  - name: bing
+    engine: bing
+    shortcut: b
+    disabled: false
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
+    disabled: false
+  - name: brave
+    engine: brave
+    shortcut: brv
+    disabled: false
+  - name: qwant
+    engine: qwant
+    shortcut: qw
+    disabled: false
+  - name: startpage
+    engine: startpage
+    shortcut: sp
+    disabled: false
+  - name: yahoo
+    engine: yahoo
+    shortcut: yh
+    disabled: false
+  - name: wikipedia
+    engine: wikipedia
+    shortcut: w
+    disabled: false
+
+  # Code and Developer Resources
+  - name: github
+    engine: github
+    shortcut: gh
+    disabled: false
+  - name: stackoverflow
+    engine: stackoverflow
+    shortcut: st
+    disabled: false
+  - name: gitlab
+    engine: gitlab
+    shortcut: gl
+    disabled: false
+
+  # Go Development
+  - name: godoc
+    engine: xpath
+    paging: false
+    search_url: https://pkg.go.dev/search?q={query}
+    url_xpath: //div[contains(@class, "SearchSnippet")]//a[1]/@href
+    title_xpath: //div[contains(@class, "SearchSnippet")]//a[1]
+    content_xpath: //div[contains(@class, "SearchSnippet")]//p
+    shortcut: gd
+    disabled: false
+    categories: it
+    about:
+      website: https://pkg.go.dev/
+      wikidata_id: Q60541919
+      official_api_documentation: https://pkg.go.dev/about
+      use_official_api: false
+      require_api_key: false
+      results: HTML
+
+  # Cloud Resources
+  - name: awsdocs
+    engine: google
+    shortcut: aws
+    disabled: false
+    search_url: https://www.google.com/search?q=site:docs.aws.amazon.com+{query}
+    categories: it
+    about:
+      website: https://docs.aws.amazon.com/
+      use_official_api: false
+      require_api_key: false
+      results: HTML
+
+  - name: azuredocs
+    engine: google
+    shortcut: az
+    disabled: false
+    search_url: https://www.google.com/search?q=site:learn.microsoft.com/azure+{query}
+    categories: it
+    about:
+      website: https://learn.microsoft.com/azure/
+      use_official_api: false
+      require_api_key: false
+      results: HTML
+
+  - name: terraform
+    engine: google
+    shortcut: tf
+    disabled: false
+    search_url: https://www.google.com/search?q=site:registry.terraform.io+OR+site:developer.hashicorp.com+{query}
+    categories: it
+    about:
+      website: https://www.terraform.io/
+      use_official_api: false
+      require_api_key: false
+      results: HTML
+
+  - name: hashicorp
+    engine: xpath
+    paging: false
+    search_url: https://developer.hashicorp.com/search?query={query}
+    url_xpath: //li[contains(@class, "search-result")]/a/@href
+    title_xpath: //li[contains(@class, "search-result")]/a/div/h2
+    content_xpath: //li[contains(@class, "search-result")]/a/div/p
+    shortcut: hc
+    disabled: false
+    categories: it
+    about:
+      website: https://developer.hashicorp.com/
+      use_official_api: false
+      require_api_key: false
+      results: HTML
+
+outgoing:
+  request_timeout: 5.0
+  pool_connections: 100
+  pool_maxsize: 100
+  enable_http2: true
+  retries: 1
+
+redis:
+  enabled: false
+
+categories_as_tabs:
+  general: true
+  images: true
+  news: true
+  videos: true
+  it: true
+  science: true
