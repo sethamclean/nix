@@ -48,6 +48,7 @@
     pkgs.pipenv
     pkgs.pre-commit
     pkgs.ruff
+    pkgs.uv
     pkgs.shfmt
     pkgs.nodePackages.npm
     pkgs.ruby
