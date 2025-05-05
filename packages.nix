@@ -15,6 +15,8 @@
     pkgs.xh
     pkgs.traceroute
     pkgs.iproute2
+    pkgs.socat
+    pkgs.netcat
     pkgs.gzip
     pkgs.zip
     pkgs.unzip
