@@ -93,6 +93,7 @@
     pkgs.mariadb
     pkgs.pkg-config
     pkgs.plantuml
+    pkgs.code2prompt
     # pyenv-virtualenv?
     # tfenv
   ];
