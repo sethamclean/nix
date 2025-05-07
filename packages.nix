@@ -1,4 +1,4 @@
-{ pkgs }: {
+{ pkgs, customPkgs ? { } }: {
   daemons = [ pkgs.python311Packages.supervisor pkgs.docker ];
   cli = [
     pkgs.azure-cli
@@ -53,6 +53,7 @@
     pkgs.uv
     pkgs.shfmt
     pkgs.nodePackages.npm
+    pkgs.nodePackages.markdownlint-cli
     pkgs.ruby
     pkgs.kubectl
     pkgs.eksctl
@@ -75,6 +76,7 @@
     pkgs.github-release
     pkgs.golangci-lint
     pkgs.cve-bin-tool
+    pkgs.yamllint
     (pkgs.python3.withPackages (python-pkgs: [
       python-pkgs.python-lsp-server
       python-pkgs.pip
@@ -88,12 +90,13 @@
       python-pkgs.ujson
     ]))
     pkgs.lefthook
-    pkgs.nixfmt
+    pkgs.nixfmt-classic
     pkgs.ast-grep
     pkgs.mariadb
     pkgs.pkg-config
     pkgs.plantuml
-    pkgs.code2prompt
+    # Add custom packages only if they exist
+    (if customPkgs ? code2prompt then customPkgs.code2prompt else null)
     # pyenv-virtualenv?
     # tfenv
   ];

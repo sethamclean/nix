@@ -11,10 +11,22 @@
           config = { allowUnfree = true; };
           inherit system;
         };
-        dev = import ./packages.nix { pkgs = pkgs; };
+        # Create an empty customPkgs record if the directory doesn't exist
+        customPkgs = if builtins.pathExists ./custom-packages then
+          import ./custom-packages { inherit pkgs; }
+        else
+          { };
+        dev = import ./packages.nix {
+          inherit pkgs;
+          inherit customPkgs;
+        };
       in {
-        devShell = pkgs.mkShell { buildInputs = [ dev.daemons dev.cli ]; };
-        defaultPackage = pkgs.buildEnv {
+        # Use devShells instead of devShell (deprecated)
+        devShells.default =
+          pkgs.mkShell { buildInputs = [ dev.daemons dev.cli ]; };
+
+        # Use packages instead of defaultPackage (deprecated)
+        packages.default = pkgs.buildEnv {
           name = "packages";
           paths = dev.daemons ++ dev.cli;
         };
