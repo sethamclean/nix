@@ -40,6 +40,7 @@
     pkgs.buildkit
     pkgs.stylua
     pkgs.nodePackages.prettier
+    pkgs.mermaid-cli
     pkgs.shellcheck
     pkgs.go
     pkgs.gopls
