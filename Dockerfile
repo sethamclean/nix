@@ -22,7 +22,7 @@ LANGUAGE="en_US.UTF-8"
 LC_ALL="en_US.UTF-8"
 LC_CTYPE="en_US.UTF-8"
 EOF
-COPY flake.nix packages.nix flake.lock /root/nix/
+COPY . /root/nix/
 RUN cd /root/nix && nix profile install
 RUN mkdir -p /etc/searxng
 COPY supervisord.conf /etc/supervisord.conf

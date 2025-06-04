@@ -74,6 +74,7 @@
     pkgs.terraform-docs
     pkgs.tfsec
     pkgs.tflint
+    pkgs.terraformer
     pkgs.github-release
     pkgs.golangci-lint
     pkgs.cve-bin-tool
@@ -97,7 +98,7 @@
     pkgs.pkg-config
     pkgs.plantuml
     # Add custom packages only if they exist
-    (if customPkgs ? code2prompt then customPkgs.code2prompt else null)
+    customPkgs.code2prompt
     # pyenv-virtualenv?
     # tfenv
   ];
