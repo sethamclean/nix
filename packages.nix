@@ -75,6 +75,7 @@
     pkgs.tfsec
     pkgs.tflint
     pkgs.terraformer
+    pkgs.infracost
     pkgs.github-release
     pkgs.golangci-lint
     pkgs.cve-bin-tool
