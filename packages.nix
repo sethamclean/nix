@@ -101,6 +101,6 @@
     pkgs.vectorcode
     # Add custom packages only if they exist
     customPkgs.code2prompt
-    # tfenv
+    customPkgs.tfenv
   ];
 }
