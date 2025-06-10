@@ -98,9 +98,9 @@
     pkgs.mariadb
     pkgs.pkg-config
     pkgs.plantuml
+    pkgs.vectorcode
     # Add custom packages only if they exist
     customPkgs.code2prompt
-    # pyenv-virtualenv?
     # tfenv
   ];
 }
