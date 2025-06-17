@@ -59,6 +59,7 @@
     pkgs.kubectl
     pkgs.eksctl
     pkgs.kubernetes-helm
+    pkgs.oras
     pkgs.fluxcd
     pkgs.vault
     pkgs.tree
@@ -92,7 +93,7 @@
       python-pkgs.pylint
       python-pkgs.flake8
       python-pkgs.ujson
-      python-pkgs.chromadb
+      python-pkgs.chromadb_0
     ]))
     pkgs.lefthook
     pkgs.nixfmt-classic
