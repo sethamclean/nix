@@ -59,6 +59,8 @@
     pkgs.kubectl
     pkgs.eksctl
     pkgs.kubernetes-helm
+    pkgs.k9s
+    pkgs.kustomize
     pkgs.oras
     pkgs.fluxcd
     pkgs.vault
