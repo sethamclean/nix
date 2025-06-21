@@ -63,6 +63,7 @@
     pkgs.kustomize
     pkgs.oras
     pkgs.fluxcd
+    pkgs.kubeconform
     pkgs.vault
     pkgs.tree
     pkgs.jq
