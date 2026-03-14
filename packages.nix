@@ -74,7 +74,6 @@
     pkgs.google-cloud-sdk
     pkgs.jfrog-cli
     pkgs.act
-    pkgs.terraform
     pkgs.terraform-ls
     pkgs.terraform-docs
     pkgs.tfsec
