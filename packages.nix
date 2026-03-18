@@ -95,7 +95,7 @@
       python-pkgs.pylint
       python-pkgs.flake8
       python-pkgs.ujson
-      python-pkgs.chromadb_0
+      python-pkgs.chromadb
     ]))
     pkgs.lefthook
     pkgs.nixfmt-classic
@@ -104,8 +104,10 @@
     pkgs.pkg-config
     pkgs.plantuml
     pkgs.vectorcode
+    # pkgs.terraform
+    pkgs.tenv
     # Add custom packages only if they exist
-    customPkgs.code2prompt
-    customPkgs.tfenv
+    # customPkgs.code2prompt
+    # customPkgs.tfenv
   ];
 }
