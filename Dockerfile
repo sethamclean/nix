@@ -24,6 +24,16 @@ LC_CTYPE="en_US.UTF-8"
 EOF
 COPY . /root/nix/
 RUN cd /root/nix && nix profile install
+# Codespaces/devcontainer DinD can hit overlayfs-on-overlayfs mount errors.
+# Force vfs for reliability in nested container environments.
+RUN <<EOF
+mkdir -p /etc/docker
+cat <<EOI > /etc/docker/daemon.json
+{
+  "storage-driver": "vfs"
+}
+EOI
+EOF
 RUN mkdir -p /etc/searxng
 COPY supervisord.conf /etc/supervisord.conf
 COPY searxng-settings.yml /etc/searxng/settings.yml
