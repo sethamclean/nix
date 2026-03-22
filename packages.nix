@@ -1,6 +1,9 @@
 { pkgs, customPkgs ? { } }: {
   daemons = [ pkgs.python311Packages.supervisor pkgs.docker ];
   cli = [
+    pkgs.direnv
+    pkgs.nixfmt
+    pkgs.opencode
     pkgs.azure-cli
     pkgs.zsh
     pkgs.neovim
@@ -98,7 +101,6 @@
       python-pkgs.chromadb
     ]))
     pkgs.lefthook
-    pkgs.nixfmt-classic
     pkgs.ast-grep
     pkgs.mariadb
     pkgs.pkg-config
