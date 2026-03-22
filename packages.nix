@@ -1,5 +1,12 @@
-{ pkgs, customPkgs ? { } }: {
-  daemons = [ pkgs.python311Packages.supervisor pkgs.docker ];
+{
+  pkgs,
+  customPkgs ? { },
+}:
+{
+  daemons = [
+    pkgs.python311Packages.supervisor
+    pkgs.docker
+  ];
   cli = [
     pkgs.direnv
     pkgs.nixfmt
@@ -24,6 +31,7 @@
     pkgs.zip
     pkgs.unzip
     pkgs.less
+    pkgs.util-linux
     # Base-devel? https://archlinux.org/packages/core/any/base-devel/
     pkgs.gcc
     pkgs.clang-tools
