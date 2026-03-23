@@ -78,6 +78,7 @@
     pkgs.vault
     pkgs.tree
     pkgs.jq
+    pkgs.yq-go
     pkgs.tailscale
     pkgs.awscli2
     pkgs.nodejs

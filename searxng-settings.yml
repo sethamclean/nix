@@ -1,5 +1,4 @@
-# SearXNG configuration optimized for local private use with JSON output only
-use_default_settings: false
+# SearXNG configuration optimized for local private use with JSON output enabled
 
 general:
   debug: false
@@ -15,26 +14,24 @@ server:
   base_url: http://localhost:8080/
   image_proxy: true
   http_protocol_version: "1.1"
-  secret_key: "change_me_to_a_random_string_for_production_use"
+  secret_key: "PLACEHOLDER_SET_SEARXNG_SECRET_ENV"
 
 ui:
-  static_use_hash: true
   default_theme: simple
   query_in_title: true
+  results_on_new_tab: true
 
 search:
-  safe_search: 0 # 0 = None, 1 = Moderate, 2 = Strict
+  safe_search: 0
   autocomplete: "google"
   default_lang: "en"
   formats:
-    - json # Only JSON format enabled
-  results_on_new_tab: true
-  default_engine: "google"
+    - html
+    - json
 
 doi_resolvers:
   oadoi.org: "https://oadoi.org/"
   doi.org: "https://doi.org/"
-  doai.io: "https://dissem.in/"
   sci-hub.se: "https://sci-hub.se/"
   sci-hub.st: "https://sci-hub.st/"
   sci-hub.ru: "https://sci-hub.ru/"
@@ -42,7 +39,6 @@ doi_resolvers:
 default_doi_resolver: "oadoi.org"
 
 engines:
-  # Major search engines enabled
   - name: google
     engine: google
     shortcut: g
@@ -76,21 +72,20 @@ engines:
     shortcut: w
     disabled: false
 
-  # Code and Developer Resources
   - name: github
     engine: github
     shortcut: gh
     disabled: false
   - name: stackoverflow
-    engine: stackoverflow
+    engine: stackexchange
     shortcut: st
-    disabled: false
+    api_site: stackoverflow
+    categories: [it, q&a]
   - name: gitlab
     engine: gitlab
     shortcut: gl
     disabled: false
 
-  # Go Development
   - name: godoc
     engine: xpath
     paging: false
@@ -109,7 +104,6 @@ engines:
       require_api_key: false
       results: HTML
 
-  # Cloud Resources
   - name: awsdocs
     engine: google
     shortcut: aws
@@ -167,10 +161,9 @@ outgoing:
   pool_connections: 100
   pool_maxsize: 100
   enable_http2: true
-  retries: 1
 
-redis:
-  enabled: false
+valkey:
+  url: false
 
 categories_as_tabs:
   general: true
