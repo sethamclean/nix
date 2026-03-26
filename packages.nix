@@ -64,6 +64,7 @@
     pkgs.ruff
     pkgs.uv
     pkgs.shfmt
+    pkgs.bun
     pkgs.nodePackages.npm
     pkgs.nodePackages.markdownlint-cli
     pkgs.ruby
@@ -115,6 +116,7 @@
     pkgs.pkg-config
     pkgs.plantuml
     pkgs.vectorcode
+    pkgs.appfire-cli
     # pkgs.terraform
     pkgs.tenv
     # Add custom packages only if they exist
