@@ -63,6 +63,7 @@
     pkgs.pre-commit
     pkgs.ruff
     pkgs.uv
+    pkgs.ty
     pkgs.shfmt
     pkgs.bun
     pkgs.nodePackages.npm
