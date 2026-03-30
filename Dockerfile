@@ -35,6 +35,10 @@ cat <<EOI > /etc/docker/daemon.json
 EOI
 EOF
 RUN mkdir -p /etc/searxng
+RUN mkdir -p /etc/wezterm
 COPY supervisord.conf /etc/supervisord.conf
+COPY wezterm-mux.lua /etc/wezterm/wezterm-mux.lua
+COPY wezterm-mux-service.sh /usr/local/bin/wezterm-mux-service
+RUN chmod +x /usr/local/bin/wezterm-mux-service
 COPY searxng-settings.yml /etc/searxng/settings.yml
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]

@@ -14,8 +14,13 @@
     pkgs.azure-cli
     pkgs.zsh
     pkgs.neovim
+    pkgs.wezterm
     pkgs.tmux
     pkgs.git
+    pkgs.gnupg
+    pkgs.pass
+    pkgs.pinentry-curses
+    pkgs.docker-credential-helpers
     pkgs.gh
     pkgs.man
     pkgs.tealdeer
