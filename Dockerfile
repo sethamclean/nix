@@ -24,13 +24,13 @@ LC_CTYPE="en_US.UTF-8"
 EOF
 COPY . /root/nix/
 RUN cd /root/nix && nix profile install
-# Codespaces/devcontainer DinD can hit overlayfs-on-overlayfs mount errors.
-# Force vfs for reliability in nested container environments.
+# For fresh-codespace DinD testing, prefer overlay2 by default.
+# If this fails in a given runtime, switch back to vfs.
 RUN <<EOF
 mkdir -p /etc/docker
 cat <<EOI > /etc/docker/daemon.json
 {
-  "storage-driver": "vfs"
+  "storage-driver": "overlay2"
 }
 EOI
 EOF
