@@ -35,6 +35,7 @@
     pkgs.gzip
     pkgs.zip
     pkgs.unzip
+    pkgs.rsync
     pkgs.less
     pkgs.util-linux
     # Base-devel? https://archlinux.org/packages/core/any/base-devel/
