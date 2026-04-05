@@ -17,6 +17,7 @@
     pkgs.wezterm
     pkgs.tmux
     pkgs.git
+    pkgs.delta
     pkgs.gnupg
     pkgs.pass
     pkgs.pinentry-curses
@@ -56,7 +57,7 @@
     pkgs.parallel
     pkgs.buildkit
     pkgs.stylua
-    pkgs.nodePackages.prettier
+    pkgs.prettier
     pkgs.mermaid-cli
     pkgs.shellcheck
     pkgs.go
@@ -72,8 +73,8 @@
     pkgs.ty
     pkgs.shfmt
     pkgs.bun
-    pkgs.nodePackages.npm
-    pkgs.nodePackages.markdownlint-cli
+    pkgs.nodejs_24
+    pkgs.markdownlint-cli
     pkgs.ruby
     pkgs.kubectl
     pkgs.eksctl
