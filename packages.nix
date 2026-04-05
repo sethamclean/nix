@@ -129,5 +129,6 @@
     # Add custom packages only if they exist
     # customPkgs.code2prompt
     # customPkgs.tfenv
+    pkgs.kind
   ];
 }
