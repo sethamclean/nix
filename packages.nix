@@ -9,6 +9,7 @@
   ];
   cli = [
     pkgs.direnv
+    pkgs.devbox
     pkgs.nixfmt
     pkgs.opencode
     pkgs.azure-cli
@@ -132,5 +133,6 @@
     # customPkgs.code2prompt
     # customPkgs.tfenv
     pkgs.kind
+    pkgs.hugo
   ];
 }
