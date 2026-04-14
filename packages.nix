@@ -16,6 +16,7 @@
     pkgs.neovim
     pkgs.wezterm
     pkgs.tmux
+    pkgs.sesh
     pkgs.git
     pkgs.delta
     pkgs.gnupg
