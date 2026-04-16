@@ -35,6 +35,19 @@
     pkgs.iproute2
     pkgs.socat
     pkgs.netcat
+    # Added for Yocto support
+    pkgs.gnutar
+    pkgs.bzip2
+    pkgs.xz
+    pkgs.patch
+    pkgs.diffstat
+    pkgs.chrpath
+    pkgs.cpio
+    pkgs.file
+    pkgs.gawk
+    pkgs.wget
+    pkgs.perl
+    # End added for Yocto support
     pkgs.gzip
     pkgs.zip
     pkgs.unzip
@@ -134,5 +147,6 @@
     # customPkgs.tfenv
     pkgs.kind
     pkgs.hugo
+    pkgs.syft
   ];
 }
