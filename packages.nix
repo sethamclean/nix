@@ -37,6 +37,7 @@
     pkgs.netcat
     # Added for Yocto support
     pkgs.gnutar
+    pkgs.zstd
     pkgs.bzip2
     pkgs.xz
     pkgs.patch
@@ -148,5 +149,6 @@
     pkgs.kind
     pkgs.hugo
     pkgs.syft
+    pkgs.grype
   ];
 }
