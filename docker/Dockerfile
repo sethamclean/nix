@@ -27,7 +27,7 @@ EOF
 RUN if ! id -u ${USERNAME} >/dev/null 2>&1; then useradd -m -s /bin/bash ${USERNAME}; fi
 RUN groupadd --force docker && usermod -aG docker,sudo ${USERNAME}
 RUN printf '%s ALL=(ALL) NOPASSWD:ALL\n' "${USERNAME}" > /etc/sudoers.d/${USERNAME} && chmod 0440 /etc/sudoers.d/${USERNAME}
-RUN mkdir -p /home/${USERNAME}/ws /workspaces /var/lib/chromadb && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/ws
+RUN mkdir -p /home/${USERNAME}/ws /workspaces && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/ws
 COPY flake.nix flake.lock /home/${USERNAME}/ws/nix/
 COPY nix /home/${USERNAME}/ws/nix/nix/
 RUN mkdir -p /nix/var/nix/profiles/per-user/root
@@ -47,9 +47,6 @@ EOF
 RUN mkdir -p /etc/searxng
 RUN mkdir -p /etc/wezterm
 COPY docker/supervisord.conf /etc/supervisord.conf
-COPY docker/wezterm-mux.lua /etc/wezterm/wezterm-mux.lua
-COPY docker/wezterm-mux-service.sh /usr/local/bin/wezterm-mux-service
-RUN chmod +x /usr/local/bin/wezterm-mux-service
 COPY docker/searxng-settings.yml /etc/searxng/settings.yml
 RUN rm -rf /home/${USERNAME}/ws && ln -s /workspaces /home/${USERNAME}/ws && chown -h ${USERNAME}:${USERNAME} /home/${USERNAME}/ws
 ENV PATH="/nix/var/nix/profiles/per-user/root/profile/bin:/nix/var/nix/profiles/default/bin:${PATH}"

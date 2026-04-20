@@ -7,9 +7,6 @@ let
     pkgs.docker
     pkgs.socat
     pkgs.tailscale
-    (pkgs.python3.withPackages (python-pkgs: [
-      python-pkgs.chromadb
-    ]))
   ];
   cli = [
     pkgs.direnv
