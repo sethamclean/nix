@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "dotfiles": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776699920,
+        "narHash": "sha256-AzRWfIBGNpP8Z1CK3xoQp+BWn8uwSteKWAUoST5Eez8=",
+        "owner": "sethamclean",
+        "repo": "dotfiles",
+        "rev": "e221028b34746a88a6c1db54a7954c97e13c5bc5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sethamclean",
+        "repo": "dotfiles",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -31,6 +47,26 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776701552,
+        "narHash": "sha256-CCRzOEFg6JwCdZIR5dLD0ypah5/e2JQVuWQ/l3rYrPY=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "c81775b640d4507339d127f5adb4105f6015edf2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
         "type": "github"
       }
     },
@@ -88,7 +124,9 @@
     },
     "root": {
       "inputs": {
+        "dotfiles": "dotfiles",
         "flake-utils": "flake-utils",
+        "home-manager": "home-manager",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2"
       }
