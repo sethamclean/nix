@@ -1,7 +1,10 @@
 .git
+.github
 node_modules
 *.pyc
 __pycache__/
 *.log
 *.md
-docker/Dockerfile
+docker/*.log
+hosts
+home

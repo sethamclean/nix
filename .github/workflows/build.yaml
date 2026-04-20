@@ -9,7 +9,7 @@ on:
       - main
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * MON"
+    - cron: "0 0 * * *"
 
 permissions:
   contents: read
@@ -68,10 +68,15 @@ jobs:
         with:
           context: .
           file: docker/Dockerfile
+          pull: true
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=gha,scope=seth-docker
+            type=registry,ref=${{ steps.image.outputs.image }}:buildcache
+          cache-to: |
+            type=gha,scope=seth-docker,mode=max
+            type=registry,ref=${{ steps.image.outputs.image }}:buildcache,mode=max
 
   scan:
     if: github.event_name != 'pull_request'
