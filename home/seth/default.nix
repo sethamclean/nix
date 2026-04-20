@@ -16,9 +16,6 @@
       source = dotfiles + "/bin";
       recursive = true;
     };
-  };
-
-  xdg.configFile = {
     ".config" = {
       source = dotfiles + "/.config";
       recursive = true;
