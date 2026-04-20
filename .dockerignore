@@ -4,5 +4,4 @@ node_modules
 __pycache__/
 *.log
 *.md
-Dockerfile
-
+docker/Dockerfile

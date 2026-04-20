@@ -1,0 +1,87 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * MON"
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+      digest: ${{ steps.build_push.outputs.digest }}
+
+    steps:
+      - name: Make free space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set image name
+        id: image
+        run: echo "image=ghcr.io/${{ github.repository_owner }}/seth-docker" >> "$GITHUB_OUTPUT"
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
+        with:
+          images: ${{ steps.image.outputs.image }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=short,prefix=sha-,enable=${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+            type=raw,value={{date 'YYYY-MM-DD'}},enable=${{ github.event_name == 'schedule' }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+
+      - name: Login to ghcr
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        id: build_push
+        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+        with:
+          context: .
+          file: docker/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  scan:
+    if: github.event_name != 'pull_request'
+    needs: build
+    uses: ./.github/workflows/scan.yaml
+    secrets: inherit
+    permissions:
+      contents: read
+      packages: read
+      security-events: write
+    with:
+      image: ${{ needs.build.outputs.image }}
+      digest: ${{ needs.build.outputs.digest }}

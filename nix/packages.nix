@@ -1,11 +1,15 @@
 {
   pkgs,
-  customPkgs ? { },
 }:
-{
-  daemons = [
+let
+  codespaceDaemons = [
     pkgs.python311Packages.supervisor
     pkgs.docker
+    pkgs.socat
+    pkgs.tailscale
+    (pkgs.python3.withPackages (python-pkgs: [
+      python-pkgs.chromadb
+    ]))
   ];
   cli = [
     pkgs.direnv
@@ -33,7 +37,6 @@
     pkgs.xh
     pkgs.traceroute
     pkgs.iproute2
-    pkgs.socat
     pkgs.netcat
     # Added for Yocto support
     pkgs.gnutar
@@ -79,7 +82,6 @@
     pkgs.go
     pkgs.gopls
     pkgs.delve
-    pkgs.parallel
     pkgs.pyenv
     pkgs.poetry
     pkgs.pipenv
@@ -89,7 +91,6 @@
     pkgs.ty
     pkgs.shfmt
     pkgs.bun
-    pkgs.nodejs_24
     pkgs.markdownlint-cli
     pkgs.ruby
     pkgs.kubectl
@@ -104,7 +105,6 @@
     pkgs.tree
     pkgs.jq
     pkgs.yq-go
-    pkgs.tailscale
     pkgs.awscli2
     pkgs.nodejs
     pkgs.yarn
@@ -119,7 +119,6 @@
     pkgs.infracost
     pkgs.github-release
     pkgs.golangci-lint
-    pkgs.cve-bin-tool
     pkgs.yamllint
     (pkgs.python3.withPackages (python-pkgs: [
       python-pkgs.python-lsp-server
@@ -132,7 +131,6 @@
       python-pkgs.pylint
       python-pkgs.flake8
       python-pkgs.ujson
-      python-pkgs.chromadb
     ]))
     pkgs.lefthook
     pkgs.ast-grep
@@ -143,12 +141,16 @@
     pkgs.appfire-cli
     # pkgs.terraform
     pkgs.tenv
-    # Add custom packages only if they exist
-    # customPkgs.code2prompt
-    # customPkgs.tfenv
     pkgs.kind
     pkgs.hugo
     pkgs.syft
     pkgs.grype
   ];
+in
+{
+  inherit cli codespaceDaemons;
+
+  daemons = codespaceDaemons;
+
+  all = codespaceDaemons ++ cli;
 }
