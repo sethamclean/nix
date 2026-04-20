@@ -4,7 +4,7 @@ ARG USERNAME=seth
 
 RUN \
   apt-get update && \
-  apt-get install -y curl sudo && \
+  apt-get install -y curl sudo locales && \
   curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
   | sh -s -- install linux --init none --no-confirm && \
   apt-get remove -y curl && \
@@ -17,13 +17,9 @@ experimental-features = nix-command flakes
 auto-optimise-store = true
 EOI
 EOF
-RUN cat <<EOF > /etc/default/locale
-# /etc/default/locale
-LANG="en_US.UTF-8"
-LANGUAGE="en_US.UTF-8"
-LC_ALL="en_US.UTF-8"
-LC_CTYPE="en_US.UTF-8"
-EOF
+RUN sed -i 's/^# *en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+  locale-gen en_US.UTF-8 && \
+  update-locale LANG=en_US.UTF-8 LANGUAGE=en_US:en
 RUN if ! id -u ${USERNAME} >/dev/null 2>&1; then useradd -m -s /bin/bash ${USERNAME}; fi
 RUN groupadd --force docker && usermod -aG docker,sudo ${USERNAME}
 RUN printf '%s ALL=(ALL) NOPASSWD:ALL\n' "${USERNAME}" > /etc/sudoers.d/${USERNAME} && chmod 0440 /etc/sudoers.d/${USERNAME}
@@ -34,6 +30,7 @@ RUN mkdir -p /nix/var/nix/profiles/per-user/root
 RUN . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd /home/${USERNAME}/ws/nix && nix profile add --no-update-lock-file --profile /nix/var/nix/profiles/per-user/root/profile .#codespace-daemons
 RUN mkdir -p /nix/var/nix/profiles/per-user/${USERNAME} && chown -R ${USERNAME}:${USERNAME} /nix/var/nix/profiles/per-user/${USERNAME}
 RUN . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd /home/${USERNAME}/ws/nix && nix profile add --no-update-lock-file --profile /nix/var/nix/profiles/per-user/${USERNAME}/profile .#default
+RUN ln -sfn /nix/var/nix/profiles/per-user/${USERNAME}/profile /home/${USERNAME}/.nix-profile && chown -h ${USERNAME}:${USERNAME} /home/${USERNAME}/.nix-profile
 # For fresh-codespace DinD testing, prefer overlay2 by default.
 # If this fails in a given runtime, switch back to vfs.
 RUN <<EOF
