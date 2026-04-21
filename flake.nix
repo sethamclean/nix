@@ -72,6 +72,12 @@
           ./hosts/wsl/default.nix
           home-manager.nixosModules.home-manager
           {
+            # Work around the observed Home Manager NixOS-module mismatch where
+            # home-manager-seth.service activates a newer generation but
+            # ~/.local/state/home-manager/gcroots/current-home stays on an older one.
+            # Closest upstream symptom match:
+            # https://github.com/nix-community/home-manager/issues/7500
+            home-manager.enableLegacyProfileManagement = true;
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {
