@@ -10,7 +10,6 @@
 
   home.file = {
     ".zshenv".source = dotfiles + "/.zshenv";
-    ".profile".source = dotfiles + "/.profile";
     ".luarc.json".source = dotfiles + "/.luarc.json";
     "bin" = {
       source = dotfiles + "/bin";
