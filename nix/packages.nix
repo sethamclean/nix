@@ -16,9 +16,12 @@ let
     pkgs.azure-cli
     pkgs.zsh
     pkgs.neovim
+    pkgs.tree-sitter
     pkgs.wezterm
     pkgs.tmux
     pkgs.sesh
+    pkgs.jujutsu
+    pkgs.jjui
     pkgs.git
     pkgs.delta
     pkgs.gnupg
