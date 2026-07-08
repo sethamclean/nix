@@ -3,6 +3,7 @@
 This repo drives two different targets:
 
 - `nixosConfigurations.wsl` for the WSL host.
+- `nixosConfigurations.hyperv` for the Hyper-V VM host.
 - Flake packages for the Codespaces image and user toolchain.
 
 ## Update Matrix
@@ -10,9 +11,23 @@ This repo drives two different targets:
 | Target | Source of truth | How to apply |
 | --- | --- | --- |
 | WSL system packages | `hosts/wsl/default.nix`, `nix/packages.nix` | `sudo nixos-rebuild switch --flake .#wsl` |
+| Hyper-V VM system packages | `hosts/hyperv/default.nix`, `nix/packages.nix` | `sudo nixos-rebuild switch --flake .#hyperv --show-trace` |
 | Codespaces root daemons | `.#codespace-daemons` | Rebuild the Docker image |
 | Codespaces user tools | `.#default` | Rebuild the Docker image, or run `nix profile upgrade nix` from `~/ws/nix` |
 | Image OS packages | `docker/Dockerfile` apt steps | Rebuild the Docker image |
+
+## Hyper-V Notes
+
+- The `hyperv` target enables Hyper-V guest integration, X11 with LightDM + i3, Chromium, PipeWire, and Flatpak support.
+- Use Chromium for Teams and install web apps as Chromium app shortcuts (PWA-style) as needed.
+- Install Zen manually via Flatpak on the VM:
+
+```bash
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install -y flathub app.zen_browser.zen
+```
+
+- Launch Zen with `flatpak run app.zen_browser.zen`.
 
 ## Codespaces Notes
 
