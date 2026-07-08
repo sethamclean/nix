@@ -11,9 +11,14 @@ let
   dev = import ../../nix/packages.nix { pkgs = pkgsForPackages; };
 in
 {
+  imports = lib.optional (builtins.pathExists ./hardware-configuration.nix) ./hardware-configuration.nix;
+
   networking.hostName = hostName;
 
   system.stateVersion = stateVersion;
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   virtualisation.hypervGuest.enable = true;
 
