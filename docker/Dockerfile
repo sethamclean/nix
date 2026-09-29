@@ -26,9 +26,8 @@ RUN printf '%s ALL=(ALL) NOPASSWD:ALL\n' "${USERNAME}" > /etc/sudoers.d/${USERNA
 RUN mkdir -p /home/${USERNAME}/ws /workspaces && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/ws
 COPY flake.nix flake.lock /home/${USERNAME}/ws/nix/
 COPY nix /home/${USERNAME}/ws/nix/nix/
-RUN mkdir -p /nix/var/nix/profiles/per-user/root
-RUN . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd /home/${USERNAME}/ws/nix && nix profile add --no-update-lock-file --profile /nix/var/nix/profiles/per-user/root/profile .#codespace-daemons
 RUN mkdir -p /nix/var/nix/profiles/per-user/${USERNAME} && chown -R ${USERNAME}:${USERNAME} /nix/var/nix/profiles/per-user/${USERNAME}
+RUN . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd /home/${USERNAME}/ws/nix && nix profile add --no-update-lock-file --profile /nix/var/nix/profiles/per-user/${USERNAME}/daemons .#codespace-daemons
 RUN . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd /home/${USERNAME}/ws/nix && nix profile add --no-update-lock-file --profile /nix/var/nix/profiles/per-user/${USERNAME}/profile .#default
 RUN ln -sfn /nix/var/nix/profiles/per-user/${USERNAME}/profile /home/${USERNAME}/.nix-profile && chown -h ${USERNAME}:${USERNAME} /home/${USERNAME}/.nix-profile
 # For fresh-codespace DinD testing, prefer overlay2 by default.
@@ -46,5 +45,5 @@ RUN mkdir -p /etc/wezterm
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/searxng-settings.yml /etc/searxng/settings.yml
 RUN rm -rf /home/${USERNAME}/ws && ln -s /workspaces /home/${USERNAME}/ws && chown -h ${USERNAME}:${USERNAME} /home/${USERNAME}/ws
-ENV PATH="/nix/var/nix/profiles/per-user/root/profile/bin:/nix/var/nix/profiles/default/bin:${PATH}"
+ENV PATH="/nix/var/nix/profiles/per-user/${USERNAME}/daemons/bin:/nix/var/nix/profiles/per-user/${USERNAME}/profile/bin:/nix/var/nix/profiles/default/bin:${PATH}"
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]

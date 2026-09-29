@@ -12,7 +12,7 @@ This repo drives two different targets:
 | --- | --- | --- |
 | WSL system packages | `hosts/wsl/default.nix`, `nix/packages.nix` | `sudo nixos-rebuild switch --flake .#wsl` |
 | Hyper-V VM system packages | `hosts/hyperv/default.nix`, `nix/packages.nix` | `sudo nixos-rebuild switch --flake .#hyperv --show-trace` |
-| Codespaces root daemons | `.#codespace-daemons` | Rebuild the Docker image |
+| Codespaces daemon profile (`seth`) | `.#codespace-daemons` | Rebuild the Docker image |
 | Codespaces user tools | `.#default` | Rebuild the Docker image, or run `nix profile upgrade nix` from `~/ws/nix` |
 | Image OS packages | `docker/Dockerfile` apt steps | Rebuild the Docker image |
 
@@ -32,7 +32,7 @@ flatpak install -y flathub app.zen_browser.zen
 ## Codespaces Notes
 
 - `seth` is the interactive user and gets the `.#default` Nix profile.
-- Root-run services use the root Nix profile populated from `.#codespace-daemons`.
+- Root-run services use a dedicated daemon profile at `/nix/var/nix/profiles/per-user/seth/daemons` populated from `.#codespace-daemons`.
 - `sudo` is installed in the image and `seth` has passwordless sudo for container admin tasks.
 - `~/ws` is the canonical workspace path. In Codespaces it points at `/workspaces`.
 
