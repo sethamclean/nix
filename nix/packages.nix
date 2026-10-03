@@ -88,6 +88,7 @@ let
     pkgs.pre-commit
     pkgs.ruff
     pkgs.ty
+    pkgs.uv
     pkgs.shfmt
     pkgs.bun
     pkgs.markdownlint-cli
