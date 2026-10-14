@@ -13,6 +13,7 @@ let
     pkgs.devbox
     pkgs.nixfmt
     pkgs.opencode
+    pkgs."claude-code"
     pkgs.azure-cli
     pkgs.zsh
     pkgs.neovim
