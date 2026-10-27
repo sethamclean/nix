@@ -16,7 +16,6 @@ let
     pkgs.opencode
     pkgs.claude-code
     pkgs.codebase-memory-mcp
-    pkgs.azure-cli
     pkgs.zsh
     pkgs.neovim
     pkgs.tree-sitter
@@ -141,7 +140,6 @@ let
     pkgs.mariadb
     pkgs.pkg-config
     pkgs.plantuml
-    pkgs.vectorcode
     pkgs.appfire-cli
     # pkgs.terraform
     pkgs.tenv
