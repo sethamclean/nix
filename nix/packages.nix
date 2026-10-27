@@ -2,6 +2,7 @@
   pkgs,
 }:
 let
+  custom = import ./pkgs { inherit pkgs; };
   codespaceDaemons = [
     pkgs.python311Packages.supervisor
     pkgs.docker
@@ -14,6 +15,7 @@ let
     pkgs.nixfmt
     pkgs.opencode
     pkgs.claude-code
+    pkgs.codebase-memory-mcp
     pkgs.azure-cli
     pkgs.zsh
     pkgs.neovim
@@ -79,6 +81,7 @@ let
     pkgs.stylua
     pkgs.prettier
     pkgs.mermaid-cli
+    custom.browser-testing
     pkgs.shellcheck
     pkgs.go
     pkgs.gopls
@@ -150,6 +153,9 @@ let
 in
 {
   inherit cli codespaceDaemons;
+
+  # Custom packages, also exposed as flake packages.
+  standalone = custom;
 
   daemons = codespaceDaemons;
 

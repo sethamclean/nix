@@ -46,14 +46,16 @@
       {
         devShells.default = pkgs.mkShell { buildInputs = dev.all; };
 
-        packages.default = pkgs.buildEnv {
-          name = "packages";
-          paths = dev.all;
-        };
+        packages = dev.standalone // {
+          default = pkgs.buildEnv {
+            name = "packages";
+            paths = dev.all;
+          };
 
-        packages.codespace-daemons = pkgs.buildEnv {
-          name = "codespace-daemons";
-          paths = dev.codespaceDaemons;
+          codespace-daemons = pkgs.buildEnv {
+            name = "codespace-daemons";
+            paths = dev.codespaceDaemons;
+          };
         };
       }
     )

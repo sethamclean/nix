@@ -36,6 +36,20 @@ flatpak install -y flathub app.zen_browser.zen
 - `sudo` is installed in the image and `seth` has passwordless sudo for container admin tasks.
 - `~/ws` is the canonical workspace path. In Codespaces it points at `/workspaces`.
 
+## Browser Testing
+
+The user toolchain includes `playwright-test`, with its matching Nix-packaged browsers.
+Run `playwright test` directly; its wrapper supplies the browser path and Node
+module search path for `@playwright/test`. No `playwright install` or system
+library installation is needed. Project-local Playwright dependencies must match
+the version reported by `playwright --version` to use these browser revisions.
+
+To install only this tooling without rebuilding the full user toolchain:
+
+```bash
+nix profile install .#browser-testing
+```
+
 ## Cache Strategy
 
 - Docker builds cache through both GitHub Actions cache storage and a registry-backed `buildcache` tag in GHCR.
