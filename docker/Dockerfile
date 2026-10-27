@@ -22,7 +22,14 @@ RUN sed -i 's/^# *en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
   update-locale LANG=en_US.UTF-8 LANGUAGE=en_US:en
 RUN if ! id -u ${USERNAME} >/dev/null 2>&1; then useradd -m -s /bin/bash ${USERNAME}; fi
 RUN groupadd --force docker && usermod -aG docker,sudo ${USERNAME}
-RUN printf '%s ALL=(ALL) NOPASSWD:ALL\n' "${USERNAME}" > /etc/sudoers.d/${USERNAME} && chmod 0440 /etc/sudoers.d/${USERNAME}
+RUN <<EOF
+cat >/etc/sudoers.d/${USERNAME} <<EOI
+Defaults:${USERNAME} secure_path="/nix/var/nix/profiles/per-user/${USERNAME}/profile/bin:/nix/var/nix/profiles/per-user/${USERNAME}/daemons/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+${USERNAME} ALL=(ALL) NOPASSWD:ALL
+EOI
+chmod 0440 /etc/sudoers.d/${USERNAME}
+visudo -cf /etc/sudoers.d/${USERNAME}
+EOF
 RUN mkdir -p /home/${USERNAME}/ws /workspaces && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/ws
 COPY flake.nix flake.lock /home/${USERNAME}/ws/nix/
 COPY nix /home/${USERNAME}/ws/nix/nix/
