@@ -33,6 +33,7 @@ flatpak install -y flathub app.zen_browser.zen
 
 - `seth` is the interactive user and gets the `.#default` Nix profile.
 - Root-run services use a dedicated daemon profile at `/nix/var/nix/profiles/per-user/seth/daemons` populated from `.#codespace-daemons`.
+- `codebase-memory-mcp` runs under supervisord as `seth` with its UI on port `9749`, and a companion indexer re-indexes every git repo under `/workspaces` every 10 minutes (`CBM_ALLOWED_ROOT=/workspaces`).
 - `sudo` is installed in the image and `seth` has passwordless sudo for container admin tasks.
 - `~/ws` is the canonical workspace path. In Codespaces it points at `/workspaces`.
 
