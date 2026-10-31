@@ -16,6 +16,7 @@ let
     pkgs.opencode
     pkgs.claude-code
     pkgs.codebase-memory-mcp
+    pkgs.workmux
     pkgs.zsh
     pkgs.neovim
     pkgs.tree-sitter

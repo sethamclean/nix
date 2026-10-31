@@ -8,6 +8,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    workmux = {
+      url = "github:raine/workmux";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     dotfiles = {
       url = "github:sethamclean/dotfiles";
       flake = false;
@@ -21,6 +25,7 @@
       nixpkgs,
       flake-utils,
       nixos-wsl,
+      workmux,
       ...
     }:
     let
@@ -34,6 +39,7 @@
         import nixpkgs {
           inherit system;
           config.allowUnfree = true;
+          overlays = [ (import ./nix/overlays.nix { inherit workmux; }) ];
         };
       mkDev = pkgs: import ./nix/packages.nix { inherit pkgs; };
     in

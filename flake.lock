@@ -128,7 +128,8 @@
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "nixos-wsl": "nixos-wsl",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "workmux": "workmux"
       }
     },
     "systems": {
@@ -143,6 +144,26 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "workmux": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792932208,
+        "narHash": "sha256-t1f7clJBGqKZPi4TfNLzfHAKlIQctB4gWhN3TiO0S40=",
+        "owner": "raine",
+        "repo": "workmux",
+        "rev": "23c09d88a1bce1b63c2d894439bb79915dd71901",
+        "type": "github"
+      },
+      "original": {
+        "owner": "raine",
+        "repo": "workmux",
         "type": "github"
       }
     }
