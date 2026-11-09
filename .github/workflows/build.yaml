@@ -74,9 +74,10 @@ jobs:
           cache-from: |
             type=gha,scope=seth-docker-${{ matrix.arch }}
             type=registry,ref=${{ steps.image.outputs.image }}:buildcache-${{ matrix.arch }}
+          # Pull requests are not logged in to ghcr, so they only write the gha cache.
           cache-to: |
             type=gha,scope=seth-docker-${{ matrix.arch }},mode=max
-            type=registry,ref=${{ steps.image.outputs.image }}:buildcache-${{ matrix.arch }},mode=max
+            ${{ github.event_name != 'pull_request' && format('type=registry,ref={0}:buildcache-{1},mode=max', steps.image.outputs.image, matrix.arch) || '' }}
 
       - name: Export digest
         if: github.event_name != 'pull_request'
