@@ -1,0 +1,36 @@
+# Flavor of the image for docker sbx (Docker Sandboxes).
+#
+# The base image provides the `agent` user (uid 1000, passwordless sudo), tini
+# as PID 1, and a Docker engine that sbx starts itself (label
+# com.docker.sandboxes.start-docker). So unlike docker/Dockerfile there is no
+# supervisord, dockerd, sshd, tailscaled or MCP daemons here.
+FROM docker.io/sbx/shell-docker-image:latest
+
+ARG USERNAME=agent
+
+USER root
+RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix \
+  | sh -s -- install linux --init none --no-confirm
+RUN <<EOF
+mkdir -p /etc/nix
+cat <<EOI > /etc/nix/nix.conf
+experimental-features = nix-command flakes
+auto-optimise-store = true
+EOI
+EOF
+COPY flake.nix flake.lock /opt/nix-src/
+COPY nix /opt/nix-src/nix/
+RUN mkdir -p /nix/var/nix/profiles/per-user/${USERNAME} && chown -R ${USERNAME}:${USERNAME} /nix/var/nix/profiles/per-user/${USERNAME}
+RUN . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh && cd /opt/nix-src && nix profile add --no-update-lock-file --profile /nix/var/nix/profiles/per-user/${USERNAME}/profile .#sbx
+RUN ln -sfn /nix/var/nix/profiles/per-user/${USERNAME}/profile /home/${USERNAME}/.nix-profile && chown -h ${USERNAME}:${USERNAME} /home/${USERNAME}/.nix-profile
+# Keep the base PATH (npm-global, ~/.local/bin) and put the Nix profile first.
+ENV PATH="/nix/var/nix/profiles/per-user/${USERNAME}/profile/bin:/nix/var/nix/profiles/default/bin:${PATH}"
+# zsh is the interactive shell. /bin/bash stays installed because sbx launches
+# the agent under bash (so BASH_ENV is sourced).
+RUN zsh="/nix/var/nix/profiles/per-user/${USERNAME}/profile/bin/zsh" \
+  && test -x "${zsh}" \
+  && echo "${zsh}" >> /etc/shells \
+  && usermod -s "${zsh}" ${USERNAME}
+USER ${USERNAME}
+# ENTRYPOINT (tini) is inherited from the base image.
+CMD ["zsh"]

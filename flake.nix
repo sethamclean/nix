@@ -58,6 +58,12 @@
             paths = dev.all;
           };
 
+          # Toolchain for the docker sbx image (docker/Dockerfile.sbx).
+          sbx = pkgs.buildEnv {
+            name = "sbx-packages";
+            paths = dev.sbx;
+          };
+
           codespace-daemons = pkgs.buildEnv {
             name = "codespace-daemons";
             paths = dev.codespaceDaemons;

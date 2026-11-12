@@ -16,11 +16,14 @@ concurrency:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [seth-docker, seth-docker-sbx]
 
     steps:
       - name: Cleanup old GHCR versions
         uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
         with:
-          package-name: seth-docker
+          package-name: ${{ matrix.package }}
           package-type: container
           min-versions-to-keep: 15

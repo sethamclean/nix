@@ -151,7 +151,15 @@ let
   ];
 in
 {
-  inherit cli codespaceDaemons;
+  inherit cli codespaceDaemons sbx;
+  # docker sbx supplies its own Docker engine, init and network, and the
+  # sandbox runs no long-lived services, so drop the tools that only serve those.
+  sbxExcluded = [
+    pkgs.wezterm
+    pkgs.buildkit
+    pkgs.codebase-memory-mcp
+  ];
+  sbx = pkgs.lib.subtractLists sbxExcluded cli;
 
   # Custom packages, also exposed as flake packages.
   standalone = custom;
