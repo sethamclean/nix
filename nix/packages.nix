@@ -149,9 +149,6 @@ let
     pkgs.syft
     pkgs.grype
   ];
-in
-{
-  inherit cli codespaceDaemons sbx;
   # docker sbx supplies its own Docker engine, init and network, and the
   # sandbox runs no long-lived services, so drop the tools that only serve those.
   sbxExcluded = [
@@ -160,6 +157,9 @@ in
     pkgs.codebase-memory-mcp
   ];
   sbx = pkgs.lib.subtractLists sbxExcluded cli;
+in
+{
+  inherit cli codespaceDaemons sbx;
 
   # Custom packages, also exposed as flake packages.
   standalone = custom;

@@ -39,6 +39,7 @@ flatpak install -y flathub app.zen_browser.zen
 - `tmux-mcp` runs under supervisord as `seth` on `127.0.0.1:8766` (MCP over HTTP at `/mcp`, read-only) from `/home/seth/.local/bin/tmux-mcp`, installed by `make install` in `/workspaces/mcp-servers`. It fails with a clear log message if the binary is missing.
 - `sudo` is installed in the image and `seth` has passwordless sudo for container admin tasks.
 - `~/ws` is the canonical workspace path. In Codespaces it points at `/workspaces`.
+
 ## docker sbx Image
 
 `docker/Dockerfile.sbx` builds a flavor of the image for docker sbx (Docker Sandboxes). It is published as `ghcr.io/<owner>/seth-docker-sbx` for `linux/amd64` and `linux/arm64` by `.github/workflows/build-sbx.yaml`.
@@ -49,7 +50,6 @@ flatpak install -y flathub app.zen_browser.zen
 - No `nix-daemon` runs in the sandbox, so `nix build` as `agent` needs `sudo`.
 - sbx mounts the workspace itself; there is no `/workspaces` or `~/ws`.
 - The sbx base image has a different user (`agent`), home (`/home/agent`) and OS release than the main image, so the two images do not share Docker layers.
-
 
 ## Browser Testing
 
