@@ -9,6 +9,12 @@ let
     pkgs.socat
     pkgs.tailscale
   ];
+  # Not available on macOS (nixpkgs meta.platforms is Linux only).
+  linuxOnly = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+    pkgs.traceroute
+    pkgs.iproute2
+    pkgs.chrpath
+  ];
   cli = [
     pkgs.direnv
     pkgs.devbox
@@ -38,8 +44,6 @@ let
     pkgs.procs
     pkgs.curl
     pkgs.xh
-    pkgs.traceroute
-    pkgs.iproute2
     pkgs.netcat
     # Added for Yocto support
     pkgs.gnutar
@@ -48,7 +52,6 @@ let
     pkgs.xz
     pkgs.patch
     pkgs.diffstat
-    pkgs.chrpath
     pkgs.cpio
     pkgs.file
     pkgs.gawk
@@ -148,7 +151,8 @@ let
     pkgs.hugo
     pkgs.syft
     pkgs.grype
-  ];
+  ]
+  ++ linuxOnly;
   # docker sbx supplies its own Docker engine, init and network, and the
   # sandbox runs no long-lived services, so drop the tools that only serve those.
   sbxExcluded = [
