@@ -103,6 +103,10 @@ in
   };
   services.tailscale.enable = true;
 
+  # Run generic-Linux glibc binaries (stub-ld otherwise refuses them). The OpenShell
+  # VM driver extracts and runs an upstream `openshell-supervisor` on the host.
+  programs.nix-ld.enable = true;
+
   # Browsers
   programs.firefox.enable = true;
   environment.systemPackages = [
