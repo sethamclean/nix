@@ -20,7 +20,12 @@ EOF
 RUN sed -i 's/^# *en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
   locale-gen en_US.UTF-8 && \
   update-locale LANG=en_US.UTF-8 LANGUAGE=en_US:en
-RUN if ! id -u ${USERNAME} >/dev/null 2>&1; then useradd -m -s /bin/bash ${USERNAME}; fi
+# The user is uid 1000. Ubuntu 24.04 ships `ubuntu` as uid 1000, so drop it first.
+# The OpenShell VM driver runs sandbox commands as uid 1000 and rejects any other uid.
+RUN if ! id -u ${USERNAME} >/dev/null 2>&1; then \
+  userdel -r ubuntu 2>/dev/null || true; \
+  useradd -u 1000 -U -m -s /bin/bash ${USERNAME}; \
+  fi
 RUN groupadd --force docker && usermod -aG docker,sudo ${USERNAME}
 RUN <<EOF
 cat >/etc/sudoers.d/${USERNAME} <<EOI
