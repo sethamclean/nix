@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [seth-docker, seth-docker-sbx]
+        package: [seth-docker]
 
     steps:
       - name: Cleanup old GHCR versions

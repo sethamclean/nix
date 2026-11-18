@@ -1,31 +1,29 @@
 {
-  description = "My Layered Docker Image with Supervisor Example";
+  description = "Seth's package profiles (Codespaces, Ubuntu laptop) and NixOS desktop";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    home-manager = {
-      url = "github:nix-community/home-manager";
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.2.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     workmux = {
       url = "github:raine/workmux";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    dotfiles = {
-      url = "github:sethamclean/dotfiles";
-      flake = false;
+    catppuccin = {
+      url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs =
     {
-      dotfiles,
       self,
-      home-manager,
       nixpkgs,
       flake-utils,
-      nixos-wsl,
+      lanzaboote,
       workmux,
+      catppuccin,
       ...
     }:
     let
@@ -35,92 +33,47 @@
         "aarch64-darwin"
       ];
       forEachSystem = flake-utils.lib.eachSystem supportedSystems;
+      overlay = import ./nix/overlays.nix { inherit workmux; };
       mkPkgs =
         system:
         import nixpkgs {
           inherit system;
           config.allowUnfree = true;
-          overlays = [ (import ./nix/overlays.nix { inherit workmux; }) ];
+          overlays = [ overlay ];
         };
-      mkDev = pkgs: import ./nix/packages.nix { inherit pkgs; };
+      mkNixos =
+        host:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit lanzaboote catppuccin overlay;
+            userName = "seth";
+          };
+          modules = [
+            ./hosts/common.nix
+            host
+          ];
+        };
     in
     forEachSystem (
       system:
       let
         pkgs = mkPkgs system;
-        dev = mkDev pkgs;
+        profiles = import ./nix/profiles.nix { inherit pkgs; };
+        mkEnv = name: paths: pkgs.buildEnv { inherit name paths; };
       in
       {
-        devShells.default = pkgs.mkShell { buildInputs = dev.all; };
+        devShells.default = pkgs.mkShell { buildInputs = profiles.codespace; };
 
-        packages = dev.standalone // {
-          default = pkgs.buildEnv {
-            name = "packages";
-            paths = dev.all;
-          };
-
-          # Toolchain for the docker sbx image (docker/Dockerfile.sbx).
-          sbx = pkgs.buildEnv {
-            name = "sbx-packages";
-            paths = dev.sbx;
-          };
-
-          codespace-daemons = pkgs.buildEnv {
-            name = "codespace-daemons";
-            paths = dev.codespaceDaemons;
-          };
+        packages = (import ./nix/pkgs { inherit pkgs; }) // {
+          default = mkEnv "packages" profiles.codespace;
+          codespace = mkEnv "codespace-packages" profiles.codespace;
+          desktop = mkEnv "desktop-packages" profiles.desktop;
+          laptop = mkEnv "laptop-packages" profiles.laptop;
+          codespace-daemons = mkEnv "codespace-daemons" profiles.daemons;
         };
       }
     )
     // {
-      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit self nixos-wsl dotfiles;
-          hostName = "wsl";
-          stateVersion = "25.05";
-          userName = "seth";
-          userExtraGroups = [ ];
-          pkgsForPackages = mkPkgs "x86_64-linux";
-        };
-        modules = [
-          ./hosts/wsl/default.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {
-              inherit dotfiles;
-              userName = "seth";
-            };
-            home-manager.users.seth = import ./home/seth;
-          }
-        ];
-      };
-
-      nixosConfigurations.hyperv = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit self dotfiles;
-          hostName = "hyperv";
-          stateVersion = "25.05";
-          userName = "seth";
-          userExtraGroups = [ ];
-          pkgsForPackages = mkPkgs "x86_64-linux";
-        };
-        modules = [
-          ./hosts/hyperv/default.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {
-              inherit dotfiles;
-              userName = "seth";
-            };
-            home-manager.users.seth = import ./home/seth;
-          }
-        ];
-      };
+      nixosConfigurations.desktop = mkNixos ./hosts/desktop;
     };
 }
