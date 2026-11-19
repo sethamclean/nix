@@ -32,7 +32,10 @@ in
     enable = true;
     flavor = "mocha";
     accent = "mauve";
-    cursors.enable = true;
+    cursors = {
+      enable = true;
+      accent = "blue";
+    };
   };
 
   system.stateVersion = "26.05";
@@ -66,6 +69,8 @@ in
   hardware.nvidia = {
     open = true;
     modesetting.enable = true;
+    # Saves and restores GPU memory across suspend (nvidia-suspend/resume services).
+    powerManagement.enable = true;
   };
 
   # Desktop
@@ -165,7 +170,19 @@ in
         color-scheme = "prefer-dark";
         accent-color = "purple";
         icon-theme = "Papirus-Dark";
-        cursor-theme = "catppuccin-mocha-mauve-cursors";
+        cursor-theme = "catppuccin-mocha-blue-cursors";
+      };
+
+      # Idle: blank (and lock) after 1 hour, never auto-suspend.
+      settings."org/gnome/desktop/session".idle-delay = lib.gvariant.mkUint32 3600;
+      settings."org/gnome/settings-daemon/plugins/power".sleep-inactive-ac-type = "nothing";
+
+      # Wallpaper is stowed from the dotfiles repo (.local/share/backgrounds).
+      settings."org/gnome/desktop/background" = {
+        picture-uri = "file:///home/${userName}/.local/share/backgrounds/nixos-mocha-crust.png";
+        picture-uri-dark = "file:///home/${userName}/.local/share/backgrounds/nixos-mocha-crust.png";
+        picture-options = "zoom";
+        primary-color = "#11111b";
       };
 
       # Smaller server-side titlebars (default is Adwaita Sans Bold 11).
@@ -177,15 +194,15 @@ in
         focus-window-down = [ "<Super>j" ];
         focus-window-up = [ "<Super>k" ];
         focus-window-right = [ "<Super>l" ];
-        inner-gaps = lib.gvariant.mkUint32 4;
-        outer-gaps = lib.gvariant.mkUint32 4;
+        inner-gaps = lib.gvariant.mkUint32 24;
+        outer-gaps = lib.gvariant.mkUint32 24;
         layouts-json = builtins.toJSON [ ultrawideLayout ];
         selected-layouts = [ [ ultrawideLayout.id ] ];
         enable-tiling-system-windows-suggestions = true;
         enable-autotiling = true;
         enable-window-border = true;
         window-use-custom-border-color = true;
-        window-border-color = "#cba6f7";
+        window-border-color = "#89b4fa";
         window-border-width = lib.gvariant.mkUint32 2;
       };
     }
