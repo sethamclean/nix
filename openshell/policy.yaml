@@ -1,0 +1,57 @@
+# Sandbox policy for `box` (see nix/pkgs/box.nix). Same as OpenShell's built-in default,
+# plus the Nix store and the user's home. The VM driver runs commands as uid 1000, which
+# the image makes `seth` (docker/Dockerfile), so `process.run_as_user` is left unset.
+version: 1
+filesystem_policy:
+  include_workdir: true
+  read_only:
+    - /bin
+    - /usr
+    - /lib
+    - /proc
+    - /dev/urandom
+    - /etc
+    - /var/log
+    - /nix
+  read_write:
+    - /tmp
+    - /dev/null
+    - /home/seth
+    # zsh-async (the spaceship prompt) opens a pty with zpty; without these the shell loops.
+    - /dev/ptmx
+    - /dev/pts
+# Everything not listed here is denied. git and curl come from the Nix profile, so the
+# binary paths are store globs, not /usr/bin. `git-remote-https` opens the connection.
+network_policies:
+  github:
+    name: github
+    endpoints:
+      - host: github.com
+        port: 443
+      - host: codeload.github.com
+        port: 443
+    binaries:
+      - path: /nix/store/*/bin/git
+      - path: /nix/store/*/libexec/git-core/git-remote-https
+      - path: /nix/store/*/bin/curl
+  # Claude Code with a subscription login (`claude`, once, inside the sandbox). The token lands
+  # in the VM's ~/.claude, so anything running as seth can read it.
+  claude:
+    name: claude
+    endpoints:
+      - host: api.anthropic.com
+        port: 443
+      - host: claude.ai
+        port: 443
+      - host: console.anthropic.com
+        port: 443
+      - host: platform.claude.com
+        port: 443
+      - host: statsig.anthropic.com
+        port: 443
+    binaries:
+      - path: /nix/store/*/bin/claude
+      - path: /nix/store/*/bin/node
+      - path: /nix/store/*/bin/.claude-wrapped
+landlock:
+  compatibility: best_effort

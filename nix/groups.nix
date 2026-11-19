@@ -70,6 +70,7 @@ in
     pkgs.codebase-memory-mcp
     pkgs.workmux
     pkgs.openshell
+    pkgs.box
   ];
 
   # Compilers and the build tools Yocto expects.

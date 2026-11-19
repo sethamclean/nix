@@ -3,67 +3,60 @@
   userName,
   ...
 }:
-# OpenShell gateway as a rootless Podman container, run by a `seth` user service.
-# Follows NVIDIA's rootless Podman instructions:
-# https://docs.nvidia.com/openshell/how-it-works/gateways/container-deployment
-# The gateway image tag follows the CLI version (nix/pkgs/openshell.nix), so the two stay matched.
+# OpenShell gateway with the microVM compute driver, run by a `seth` user service.
+# Each sandbox is its own libkrun microVM. The driver sizes every VM from the gateway
+# config below; the CLI's `--cpu` and `--memory` flags are ignored by it.
+# The gateway and driver come from nix/pkgs/openshell-gateway.nix (upstream binaries).
 let
   dataDir = "/home/${userName}/.local/share/openshell-gateway";
-  image = "ghcr.io/nvidia/openshell/gateway:${pkgs.openshell.version}";
-  userns = "--userns=keep-id:uid=1000,gid=1000";
 
-  # Generate the mTLS bundle once; later starts reuse it.
+  # 20 GiB of 32 GB leaves the desktop about 10 GiB. Guest memory is allocated on demand,
+  # but the guest keeps its page cache, so this is also the worst case for the host.
+  gatewayConfig = (pkgs.formats.toml { }).generate "openshell-gateway.toml" {
+    openshell = {
+      version = 2;
+      gateway.compute_driver = "vm";
+      drivers.vm = {
+        vcpus = 12;
+        mem_mib = 20480;
+        overlay_disk_mib = 65536;
+      };
+    };
+  };
+
+  # Generate the mTLS bundle once; later starts reuse it. The CLI reads the same directory.
   generateCerts = pkgs.writeShellScript "openshell-generate-certs" ''
     set -eu
     mkdir -p ${dataDir}
     if [ ! -f ${dataDir}/tls/ca.crt ]; then
-      podman run --rm ${userns} \
-        -v ${dataDir}:${dataDir} \
-        -e HOME=${dataDir} \
-        ${image} \
-        generate-certs --output-dir ${dataDir}/tls
+      ${pkgs.openshell-gateway}/bin/openshell-gateway generate-certs --output-dir ${dataDir}/tls
     fi
   '';
 in
 {
-  # Rootless Podman only. No dockerCompat: rootless Docker owns the `docker` command.
-  virtualisation.podman.enable = true;
-
-  # The CLI must read the same TLS directory as the gateway.
+  # glibc binaries (the gateway's driver extracts a supervisor at run time) need nix-ld:
+  # see programs.nix-ld in ./default.nix.
   environment.sessionVariables.OPENSHELL_LOCAL_TLS_DIR = "${dataDir}/tls";
 
   systemd.user.services.openshell-gateway = {
-    description = "OpenShell gateway (rootless Podman)";
+    description = "OpenShell gateway (microVM driver)";
     wantedBy = [ "default.target" ];
-    requires = [ "podman.socket" ];
-    after = [ "podman.socket" ];
-    # newuidmap/newgidmap come from /run/wrappers; rootless Podman needs them.
+    # `openshell-driver-vm` is looked up on PATH; the driver builds ext4 images with e2fsprogs.
     path = [
-      pkgs.podman
-      "/run/wrappers"
+      pkgs.openshell-gateway
+      pkgs.e2fsprogs
     ];
+    environment = {
+      OPENSHELL_GATEWAY_CONFIG = "${gatewayConfig}";
+      OPENSHELL_LOCAL_TLS_DIR = "${dataDir}/tls";
+      OPENSHELL_SERVER_PORT = "8080";
+      OPENSHELL_DB_URL = "sqlite:${dataDir}/gateway-vm.db";
+    };
     serviceConfig = {
-      # The first start pulls the image, which can take longer than the 90s default.
-      TimeoutStartSec = "10min";
       Restart = "on-failure";
       RestartSec = "10s";
       ExecStartPre = generateCerts;
-      ExecStart = ''
-        ${pkgs.podman}/bin/podman run --rm --replace \
-          --name openshell-gateway \
-          ${userns} \
-          -p 127.0.0.1:8080:8080 \
-          -v ${dataDir}:${dataDir} \
-          -v %t/podman/podman.sock:/var/run/podman.sock \
-          -e HOME=${dataDir} \
-          -e XDG_DATA_HOME=${dataDir} \
-          -e OPENSHELL_LOCAL_TLS_DIR=${dataDir}/tls \
-          -e OPENSHELL_COMPUTE_DRIVER=podman \
-          -e OPENSHELL_PODMAN_SOCKET=/var/run/podman.sock \
-          -e OPENSHELL_DB_URL=sqlite:${dataDir}/gateway.db \
-          ${image}
-      '';
-      ExecStop = "${pkgs.podman}/bin/podman stop --ignore openshell-gateway";
+      ExecStart = "${pkgs.openshell-gateway}/bin/openshell-gateway";
     };
   };
 }
